@@ -3,8 +3,12 @@ package com.revanth.blogs.service.impl;
 import com.revanth.blogs.entity.Post;
 import com.revanth.blogs.exception.ResourceNotFoundException;
 import com.revanth.blogs.payload.PostDTO;
+import com.revanth.blogs.payload.PostResponse;
 import com.revanth.blogs.repository.PostRepository;
 import com.revanth.blogs.service.PostService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,9 +33,24 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDTO> getALLPosts() {
-        List<Post> posts = postRepository.findAll();
-        return posts.stream().map(post->mapToDTO(post)).collect(Collectors.toList());
+    public PostResponse getALLPosts(int pageNo, int pageSize) {
+        PostResponse postResponse= new PostResponse();
+
+        Pageable pageable  = PageRequest.of(pageNo, pageSize);
+
+        //get content from Page objects
+        Page<Post> postsPage = postRepository.findAll(pageable);
+        List<Post> posts = postsPage.getContent();
+        List<PostDTO> postDTOS= posts.stream().map(post->mapToDTO(post)).collect(Collectors.toList());
+        //set postRespone obj
+        postResponse.setContent(postDTOS);
+        postResponse.setLast(postsPage.isLast());
+        postResponse.setPageNo(postsPage.getNumber());
+        postResponse.setPageSize(postsPage.getSize());
+        postResponse.setTotalElements(postsPage.getTotalElements());
+        postResponse.setTotalPages(postsPage.getTotalPages());
+        return postResponse;
+
     }
 
     @Override

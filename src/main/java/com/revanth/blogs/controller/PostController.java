@@ -2,11 +2,13 @@ package com.revanth.blogs.controller;
 
 import com.revanth.blogs.entity.Post;
 import com.revanth.blogs.payload.PostDTO;
+import com.revanth.blogs.payload.PostResponse;
 import com.revanth.blogs.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -26,13 +28,18 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostDTO> getAllPosts(){
-        return postService.getALLPosts();
+    public PostResponse getAllPosts(
+            @RequestParam(value = "pageNo", defaultValue="0" ,required =false) int pageNo ,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+    ){
+        return postService.getALLPosts(pageNo,pageSize);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<PostDTO> getPostById(@PathVariable(name="id") long id){
         return ResponseEntity.ok(postService.getPostById(id));
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable(name = "id") long id){
         return ResponseEntity.ok(postService.updatePost(postDTO,id));

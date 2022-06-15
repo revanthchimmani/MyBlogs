@@ -1,13 +1,12 @@
 package com.revanth.blogs.service;
 
 import com.revanth.blogs.payload.PostDTO;
-
-import java.util.List;
+import com.revanth.blogs.payload.PostResponse;
 
 public interface PostService {
     PostDTO createPost(PostDTO postDTO);
 
-    List<PostDTO> getALLPosts();
+    PostResponse getALLPosts(int pageNo, int pageSize);
 
     PostDTO getPostById(long id);
 
