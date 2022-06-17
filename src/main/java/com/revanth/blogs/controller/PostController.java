@@ -1,6 +1,5 @@
 package com.revanth.blogs.controller;
 
-import com.revanth.blogs.entity.Post;
 import com.revanth.blogs.payload.PostDTO;
 import com.revanth.blogs.payload.PostResponse;
 import com.revanth.blogs.service.PostService;
@@ -8,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
-import java.util.List;
+import static com.revanth.blogs.utils.Constants.DEFAULT_PAGE_NUMBER;
+import static com.revanth.blogs.utils.Constants.DEFAULT_PAGE_SIZE;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -29,8 +28,8 @@ public class PostController {
 
     @GetMapping
     public PostResponse getAllPosts(
-            @RequestParam(value = "pageNo", defaultValue="0" ,required =false) int pageNo ,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
+            @RequestParam(value = "pageNo", defaultValue= DEFAULT_PAGE_NUMBER ,required =false) int pageNo ,
+            @RequestParam(value = "pageSize", defaultValue = DEFAULT_PAGE_SIZE, required = false) int pageSize
     ){
         return postService.getALLPosts(pageNo,pageSize);
     }
