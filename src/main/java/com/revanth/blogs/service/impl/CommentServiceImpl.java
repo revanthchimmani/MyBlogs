@@ -8,6 +8,7 @@ import com.revanth.blogs.payload.CommentDTO;
 import com.revanth.blogs.repository.CommentRepository;
 import com.revanth.blogs.repository.PostRepository;
 import com.revanth.blogs.service.CommentService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,12 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
     private CommentRepository commentRepository;
     private PostRepository postRepository;
+    private ModelMapper modelMapper;
 
-
-    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository, ModelMapper modelMapper) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
+        this.modelMapper= modelMapper;
     }
 
     @Override
@@ -80,20 +82,10 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private CommentDTO mapToCommentDTO(Comment comment) {
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setId(comment.getId());
-        commentDTO.setBody(comment.getBody());
-        commentDTO.setEmail(comment.getEmail());
-        commentDTO.setName(comment.getName());
-        return commentDTO;
+        return modelMapper.map(comment,CommentDTO.class);
     }
 
     private Comment mapToComment(CommentDTO commentDTO) {
-        Comment comment = new Comment();
-        comment.setId(commentDTO.getId());
-        comment.setEmail(commentDTO.getEmail());
-        comment.setName(commentDTO.getName());
-        comment.setBody(commentDTO.getBody());
-        return comment;
+        return modelMapper.map(commentDTO,Comment.class);
     }
 }

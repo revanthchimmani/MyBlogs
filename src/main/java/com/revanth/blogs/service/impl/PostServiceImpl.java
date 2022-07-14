@@ -6,6 +6,7 @@ import com.revanth.blogs.payload.PostDTO;
 import com.revanth.blogs.payload.PostResponse;
 import com.revanth.blogs.repository.PostRepository;
 import com.revanth.blogs.service.PostService;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +19,10 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
 
-    public PostServiceImpl(PostRepository postRepository){
+    private ModelMapper modelMapper;
+        public PostServiceImpl(PostRepository postRepository,ModelMapper modelMapper){
         this.postRepository=postRepository;
+        this.modelMapper=modelMapper;
     }
     @Override
     public PostDTO createPost(PostDTO postDTO) {
@@ -76,19 +79,10 @@ public class PostServiceImpl implements PostService {
 
     //convert Entity into DTO
     private PostDTO mapToDTO(Post post){
-        PostDTO postDTO=new PostDTO();
-        postDTO.setId(post.getId());
-        postDTO.setTitle(post.getTitle());
-        postDTO.setDescription(post.getDescription());
-        postDTO.setContent(post.getContent());
-        return postDTO;
+        return modelMapper.map(post, PostDTO.class);
     }
     // convert DTO to Entity
     private Post mapToEntity(PostDTO postDTO){
-        Post post = new Post();
-        post.setTitle(postDTO.getTitle());
-        post.setDescription(postDTO.getDescription());
-        post.setContent(postDTO.getContent());
-        return post;
+        return modelMapper.map(postDTO,Post.class);
     }
 }
