@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static com.revanth.blogs.utils.Constants.DEFAULT_PAGE_NUMBER;
 import static com.revanth.blogs.utils.Constants.DEFAULT_PAGE_SIZE;
 
@@ -22,7 +24,7 @@ public class PostController {
 
     //create blog post
     @PostMapping
-    public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postRequestBody){
+    public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO postRequestBody){
         return new ResponseEntity<>(postService.createPost(postRequestBody), HttpStatus.CREATED);
     }
 
@@ -40,7 +42,7 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO, @PathVariable(name = "id") long id){
+    public ResponseEntity<PostDTO> updatePost(@Valid @RequestBody PostDTO postDTO, @PathVariable(name = "id") long id){
         return ResponseEntity.ok(postService.updatePost(postDTO,id));
     }
     @DeleteMapping("/{id}")
